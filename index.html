@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Example with input and axe accessibility report</title>
+    <style>
+      .tt-menu {
+        background: white;
+        padding: 5px;
+        border: 1px solid firebrick;
+        box-shadow: 2px 2px lavender;
+        line-height: 1.5;
+        width: 100px;
+      }
+      #search-input {
+        width: 100px;
+      }
+      #axe-output {
+        padding: 20px;
+        width: 750px;
+        background-color: #D3D3D3;
+        font-family: monospace;
+        font-size: 12px;
+      }
+      #violations-title {
+        margin-top: 150px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Example with typeahead input and axe accessibility report</h1>
+    <!-- <label for="search-input">Search with autocomplete:</label> -->
+    <input type="text" placeholder="search here" id="search-input">
+    <h3 id="violations-title">Axe.js violations for search input:</h3>
+    <div id="axe-output"></div>
+    <script src='node_modules/jquery/dist/jquery.min.js'></script>
+    <script src='node_modules/corejs-typeahead/dist/typeahead.jquery.min.js'></script>
+    <script src='node_modules/axe-core/axe.min.js'></script>
+    <script>
+      $(document).ready(() => {
+        $('#search-input').typeahead({}, {name: 'my-dataset', source: (query, syncResults) => {
+          syncResults(['cat', 'dog', 'bat']);
+        }});
+        setTimeout(() => {
+          axe.run('#search-input', function(err, results) {
+            $('#axe-output').text(JSON.stringify(results.violations));
+          });
+        }, 3000);
+      });
+    </script>
+  </body>
+</html> 
